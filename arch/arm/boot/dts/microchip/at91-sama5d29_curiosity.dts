@@ -92,6 +92,23 @@
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
 	};
+        reserved-memory {
+                #address-cells = <1>;
+                #size-cells = <1>;
+                ranges;
+
+               tpm_event_log: tpm_event_log@3f000000 {
+               compatible = "tcg,tpm_event_log";
+               reg = <0x3f000000 0x00040000>; // 256 KiB
+               no-map;
+        };
+    };
+
+    chosen {
+        // Some U-Boot builds also look at these legacy properties.
+        linux,sml-base = <0x3f000000>;
+        linux,sml-size = <0x00040000>;
+    };
 };
 
 &adc {
@@ -130,14 +147,23 @@
 &flx4 {
 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
 	status = "okay";
-
-	spi6: spi@400 {
-		dmas = <0>, <0>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_rpi_spi>;
-		status = "okay";
-	};
 };
+
+&spi6 {
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_rpi_spi>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        tpm@1 {
+                compatible = "infineon,slb9670";
+                reg = <1>;
+                spi-max-frequency = <400000>;
+                status = "okay";
+        };
+};
+
 
 &i2c0 {
 	dmas = <0>, <0>;
