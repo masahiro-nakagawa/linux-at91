@@ -15,7 +15,7 @@
 #include <dt-bindings/mfd/atmel-flexcom.h>
 
 / {
-	model = "Microchip SAMA5D29 Curiosity";
+	model = "Microchip SAMA5D29 Curiosity KERNEL";
 	compatible = "microchip,sama5d29-curiosity", "atmel,sama5d29", "atmel,sama5d2", "atmel,sama5";
 
 	aliases {
